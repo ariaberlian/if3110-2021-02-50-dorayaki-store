@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@700&family=Poppins:wght@400;500;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background-color: #376db5;
+    overflow: hidden;
+}
+
+html {
+    overflow-y: scroll;
+}
+
+.center {
+    text-align: center;
+    margin: auto;
+    margin-top: 2em;
+    padding-bottom: 2vh;
+    padding-left: 2vh;
+    padding-right: 2vh;
+    margin-bottom: 2em;
+    width: 87vw;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 10px 10px 15px rgb(0 0 0 / 5%);
+}
+
+.center h1 {
+    text-align: center;
+    padding: 20px 0;
+    border-bottom: 1px solid silver;
+}
+
+.back_button {
+    position: fixed;
+    top: -20px;
+    left: -20px;
+    min-width: 20vh;
+    min-height: 10vh;
+    border: 1px solid #ccc;
+    border-radius: 27px;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    margin-bottom: 4vh;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+}
+
+.back_button:hover {
+    background-color: #376db5;
+    transition: .5s;
+    color: white;
+}
+
+.back_button h3 {
+    position: relative;
+    text-align: center;
+    top: 1.3vh;
+    left: 0.5vh;
+    padding: 15px 0;
+
+}
+
+.dropdown {
+    display: inline-block;
+    margin-right: 1em;
+    margin-top: 0.5em;
+    color: blue;
+    /* text-decoration: underline; */
+}
+
+.dropdown:hover {
+    /* background-color: silver; */
+    color: black;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.dropdown-content {
+    display: none;
+    position: relative;
+}
+
+.show {
+    display: block;
+}
+
+.saya {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    margin-top: 0.5em;
+}
+
+table,
+td,
+th {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+}
+
+table {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1em;
+}
+
+a {
+    color: blue;
+    text-decoration: none;
+}
+
+a:hover {
+    /* background-color: silver; */
+    color: black;
+    transition: 0.5s;
+
+}
+
+
+/* Desktop Version */
+@media screen and (min-width: 605px) {
+    .center {
+        width: 60vw;
+        margin-top: 5em;
+        margin-bottom: 5em;
+    }
+}
