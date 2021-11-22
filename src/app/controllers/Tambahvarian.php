@@ -6,10 +6,22 @@ class Tambahvarian extends Controller
         if (!isset($_SESSION['username'])) { // Bila tidak login redirect ke login
             header("Location: " . BASEURL . "login");
         }
-        if($_SESSION['is_admin'] == 0){ //Bila bukan admin redirect ke dashboard
-            header("Location: ".BASEURL);
+        if ($_SESSION['is_admin'] == 0) { //Bila bukan admin redirect ke dashboard
+            header("Location: " . BASEURL);
         }
-        
+
+
+        //consume SOAP API
+        $soapclient = new SoapClient("http://localhost:8080/JayenInterface/services/VariantServiceImpl?wsdl");
+        $response = $soapclient->getVariantList();
+        $array = json_decode(json_encode($response), true);
+        $isi = $array["getVariantListReturn"];
+        $arr_variant = json_decode($isi);
+        $arr_variant = json_decode(json_encode($arr_variant), true);
+        for ($i=0; $i < sizeof($arr_variant); $i++) {  
+            $variant_list[$i] = $arr_variant[$i]["nama_resep"];
+        }
+
         if (isset($_POST["submit"])) {
             $nama = $_POST['nama'];
             $desc = $_POST['desc'];
@@ -36,7 +48,7 @@ class Tambahvarian extends Controller
             if (file_exists($target_file)) {
                 // echo "Sorry, file already exists.";
                 $uploadOk = 0;
-                echo 
+                echo
                 "<script>
                     alert('File gambar sudah ada!');
                 </script>";
@@ -45,7 +57,7 @@ class Tambahvarian extends Controller
             // Check file size
             if ($_FILES["gambar"]["size"] > 1000000) { //maks 1MB
                 $uploadOk = 0;
-                echo 
+                echo
                 "<script>
                     alert('File terlalu besar!');
                 </script>";
@@ -57,7 +69,7 @@ class Tambahvarian extends Controller
                 && $imageFileType != "gif"
             ) {
                 $uploadOk = 0;
-                echo 
+                echo
                 "<script>
                     alert('Format file tidak didukung');
                 </script>";
@@ -74,22 +86,23 @@ class Tambahvarian extends Controller
                     $gambar = $target_file;
 
                     $this->model('VarDorayaki_model')->addVariant($nama, $gambar, $desc, $harga, $stok);
-                    echo 
+                    echo
                     "<script>
                         alert('Variant telah ditambahkan');
                     </script>";
                     // header("Location: ".BASEURL);
-    
+
                 } else {
-                    echo 
+                    echo
                     "<script>
                         alert('Gagal mengupload gambar');
                     </script>";
                 }
-            } 
+            }
         }
 
         $data['halaman'] = 'Tambah Varian';
+        $data['avail_variant'] = $variant_list;
         $this->view('tambaheditvarian/index', $data);
     }
 }

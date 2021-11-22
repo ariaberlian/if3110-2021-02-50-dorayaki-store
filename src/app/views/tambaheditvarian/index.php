@@ -18,9 +18,23 @@
     <div class="center">
         <form method="post" enctype="multipart/form-data">
             <div class="txt_field">
-                <input required type="text" name="nama" id="nama" value="<?php if (isset($data['detail'])) echo $data['detail']['nama']; ?>">
-                <span></span>
+                <?php
+                if (isset($data['detail'])) {
+                    echo "<input required type='text' name='nama' id='nama' value='" . $data['detail']['nama'] . "'>
+                         <span></span>
                 <label>Nama Varian</label>
+                        ";
+                } else {
+                    echo "Varian : 
+                        <select name='nama' id='nama required'>";
+                    foreach ($data['avail_variant'] as $variant) {
+                        echo "<option value='" . $variant . "'>" . $variant . "</option>";
+                    }
+                    echo "</select>";
+                }
+                ?>
+
+
             </div>
             <div class="text_field">
                 <label for="gambar" class="upload-file">Gambar</label>
