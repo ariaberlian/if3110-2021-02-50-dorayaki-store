@@ -11,6 +11,7 @@ Stand With Dorayaki manager adalah web aplikasi yang digunakan costumer dan admi
 1. install docker
 2. di cli ketikkan "docker-compose up -d"
 3. dalam cli docker ketikkan "a2enmod rewrite" dan "service apache2 restart"
+4. buka php.ini di apache lalu hapus karakter ";" di depan extension=soap
 
 # How to Run
 1. Buka browser kesayangan anda

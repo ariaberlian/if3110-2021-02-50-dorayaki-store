@@ -1,6 +1,11 @@
 <?php
+
+use function PHPSTORM_META\type;
+
 class Tambahvarian extends Controller
 {
+
+
     public function index()
     {
         if (!isset($_SESSION['username'])) { // Bila tidak login redirect ke login
@@ -11,15 +16,34 @@ class Tambahvarian extends Controller
         }
 
 
-        //consume SOAP API
+        //consume SOAP API : GET VARIANT LIST
         $soapclient = new SoapClient("http://localhost:8080/JayenInterface/services/VariantServiceImpl?wsdl");
-        $response = $soapclient->getVariantList();
+
+        $ip = getenv('HTTP_CLIENT_IP') ?:
+            getenv('HTTP_X_FORWARDED_FOR') ?:
+            getenv('HTTP_X_FORWARDED') ?:
+            getenv('HTTP_FORWARDED_FOR') ?:
+            getenv('HTTP_FORWARDED') ?:
+            getenv('REMOTE_ADDR');
+
+        $param = array('ip' => $ip);
+
+        $response = $soapclient->getVariantList($param);
         $array = json_decode(json_encode($response), true);
         $isi = $array["getVariantListReturn"];
         $arr_variant = json_decode($isi);
-        $arr_variant = json_decode(json_encode($arr_variant), true);
-        for ($i=0; $i < sizeof($arr_variant); $i++) {  
-            $variant_list[$i] = $arr_variant[$i]["nama_resep"];
+        if (json_last_error() === JSON_ERROR_NONE) {
+            $arr_variant = json_decode(json_encode($arr_variant), true);
+
+            for ($i = 0; $i < sizeof($arr_variant); $i++) {
+                $variant_list[$i] = $arr_variant[$i]["nama_resep"];
+            }
+            $data['avail_variant'] = $variant_list;
+        } else {
+            $data['limited'] = $isi;
+            $this->view('tambaheditvarian/limited', $data);
+            http_response_code(429);
+            exit;
         }
 
         if (isset($_POST["submit"])) {
@@ -102,7 +126,6 @@ class Tambahvarian extends Controller
         }
 
         $data['halaman'] = 'Tambah Varian';
-        $data['avail_variant'] = $variant_list;
         $this->view('tambaheditvarian/index', $data);
     }
 }

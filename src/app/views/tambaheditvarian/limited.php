@@ -1,0 +1,1 @@
+<h1>HTTP error:429 Too many request Sent :) <br> <?= $data['limited'] ?></h1>
