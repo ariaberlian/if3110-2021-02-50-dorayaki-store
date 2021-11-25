@@ -73,7 +73,7 @@ class VarDorayaki_model
 
     public function editVariant($nama, $gambar, $desc, $harga, $stok)
     {
-        try{
+        try {
             if (is_null($gambar)) {
                 $query = "UPDATE varian_dorayaki
                     SET nama = :nama, desc = :desc, harga = :harga, stok = :stok 
@@ -88,38 +88,69 @@ class VarDorayaki_model
             $this->db->bind('desc', "$desc");
             $this->db->bind('harga', "$harga");
             $this->db->bind('stok', "$stok");
-            if (!is_null($gambar)){
-                $this->db->bind('gambar', "$gambar");}
+            if (!is_null($gambar)) {
+                $this->db->bind('gambar', "$gambar");
+            }
             $this->db->execute();
             return true;
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             return false;
         }
-        
     }
-    public function ubahStok($nama, $username, $stok_akhir, $perubahan){
-        try{
+    public function ubahStok($nama, $username, $stok_akhir, $perubahan)
+    {
+        try {
             $query = "UPDATE varian_dorayaki
-                    SET stok = :stok";
+                    SET stok = :stok
+                    WHERE nama = :nama";
             $query2 = "INSERT INTO histori (nama_var, username, tanggal_perubahan, perubahan) VALUES (:nama, :username, datetime('now'), :perubahan);";
             $this->db->query($query);
             $this->db->bind("stok", "$stok_akhir");
             $this->db->execute();
-    
+
             $this->db->query($query2);
             $this->db->bind("nama", "$nama");
             $this->db->bind("username", "$username");
             $this->db->bind("perubahan", "$perubahan");
             $this->db->execute();
             return true;
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             return false;
         }
     }
 
-    public function getStok($nama){
+    public function addStok(
+        $nama,
+        $username,
+        $perubahan
+    ) {
+        try {
+            $query = "UPDATE varian_dorayaki
+                    SET stok = stok + :perubahan
+                    WHERE nama = :namaa";
+            $query2 = "INSERT INTO histori (nama_var, username, tanggal_perubahan, perubahan) VALUES (:namaa, :username, datetime('now'), :perubahan);";
+
+            $this->db->query($query);
+            $this->db->bind("namaa", "$nama");
+            $this->db->bind("perubahan", "$perubahan");
+            $this->db->execute();
+
+            $this->db->query($query2);
+            $this->db->bind("namaa", "$nama");
+            $this->db->bind("username", "$username");
+            $this->db->bind("perubahan", "$perubahan");
+            $this->db->execute();
+            return true;
+        } catch (PDOException $e) {
+            echo $e;
+            return false;
+        }
+    }
+
+    public function getStok($nama)
+    {
         $this->db->query(
-            "SELECT stok FROM varian_dorayaki WHERE nama = '".$nama."';"
+            "SELECT stok FROM varian_dorayaki WHERE nama = '" . $nama . "';"
         );
         return $this->db->single();
     }
